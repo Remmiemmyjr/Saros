@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class DoorOpen : MonoBehaviour
 {
+
+    Rigidbody2D rb;
+    Transform transform;
+    int doorSpeed = 4;
     public bool DoorOpening = false;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        rb = gameObject.GetComponent<Rigidbody2D>();
+        transform = gameObject.GetComponent<Transform>();
     }
 
     // Update is called once per frame
@@ -17,7 +22,8 @@ public class DoorOpen : MonoBehaviour
     {
         if(DoorOpening == true)
         {
-            Debug.Log("Door opens");
+            Debug.Log("Door opening");
+            rb.AddForce(transform.forward * doorSpeed);
         }
     }
 }
