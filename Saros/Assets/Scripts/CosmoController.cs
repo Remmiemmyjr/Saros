@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 public class CosmoController : MonoBehaviour
 {
@@ -14,34 +15,43 @@ public class CosmoController : MonoBehaviour
 
     public float maxDistance = 3;
     public float speed = 4f;
+    public float forceMultiplier = 50f;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anchor = transform.position;
+
+        Time.timeScale = 2;
     }
 
     void Update()
     {
-        velocity = rb.velocity;
-        if(Input.GetKey(KeyCode.RightArrow))
+    //    velocity = rb.velocity;
+    //    if(Input.GetKey(KeyCode.RightArrow))
+    //    {
+    //        velocity.x = speed;
+    //    }
+    //    else if(Input.GetKey(KeyCode.LeftArrow))
+    //    {
+    //        velocity.x = -speed;
+    //    }
+    //    else
+    //    {
+    //        velocity.x = 0;
+    //    }
+    //    rb.velocity = velocity;
+
+        if(Input.GetKeyDown(KeyCode.R))
         {
-            velocity.x = speed;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
-        else if(Input.GetKey(KeyCode.LeftArrow))
-        {
-            velocity.x = -speed;
-        }
-        else
-        {
-            velocity.x = 0;
-        }
-        rb.velocity = velocity;
         
     }
 
     private void OnMouseDown()
     {
+        rb.bodyType = RigidbodyType2D.Kinematic;
         startMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
     }
 
@@ -49,10 +59,12 @@ public class CosmoController : MonoBehaviour
     {
         currentMousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         direction = currentMousePos - startMousePos;
-        if(direction.magnitude > maxDistance)
+        direction = direction.normalized * Mathf.Sqrt(direction.magnitude);
+        if (direction.magnitude > maxDistance)
         {
             direction = direction.normalized * maxDistance;
         }
+       
         transform.position = anchor + direction;
 
         Debug.Log(direction);
@@ -61,8 +73,10 @@ public class CosmoController : MonoBehaviour
     private void OnMouseUp()
     {
         //transform.position = anchor;
-
         rb.bodyType = RigidbodyType2D.Dynamic;
-        rb.AddForce(-direction * 5f, ForceMode2D.Impulse);
+        rb.AddForce(-direction * forceMultiplier, ForceMode2D.Impulse);
+        //rb.velocity = -direction * forceMultiplier;
+
+        Debug.Log($"Mouse Up: {-direction * forceMultiplier} RB Vel: {rb.velocity}");
     }
 }
