@@ -42,7 +42,7 @@ public class OrbBehavior : MonoBehaviour
         {
             otherRb.velocity = Vector3.zero;
             other.transform.position = Vector3.MoveTowards(other.transform.position, transform.position, 0.2f);
-            yield return new WaitForSeconds(0.05f);
+            yield return new WaitForSeconds(0.01f);
             distance = other.transform.position - transform.position;
         }
     }
