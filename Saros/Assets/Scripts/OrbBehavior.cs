@@ -7,7 +7,6 @@ public class OrbBehavior : MonoBehaviour
     Rigidbody2D rb;
     Rigidbody2D otherRb;
     Vector3 distance;
-    float t = 0.35f;
     bool happened;
     // Start is called before the first frame update
     void Start()
@@ -27,8 +26,10 @@ public class OrbBehavior : MonoBehaviour
 
         //other.transform.position = transform.position;
         Debug.Log("Triggered");
-
-        StartCoroutine(ToOrb(other));
+        if(CosmoController.homeOrb != (object)this)
+        {
+            StartCoroutine(ToOrb(other));
+        }
 
     }
 
@@ -45,5 +46,8 @@ public class OrbBehavior : MonoBehaviour
             yield return new WaitForSeconds(0.01f);
             distance = other.transform.position - transform.position;
         }
+
+        CosmoController.homeOrb = this;
+        CosmoController.anchor = this.gameObject.transform.position;
     }
 }

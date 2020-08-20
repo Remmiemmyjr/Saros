@@ -6,12 +6,14 @@ using UnityEngine.SceneManagement;
 
 public class CosmoController : MonoBehaviour
 {
+    internal static object homeOrb;
+
     Rigidbody2D rb;
     Vector2 velocity;
     Vector3 direction;
     Vector3 startMousePos;
     Vector3 currentMousePos;
-    Vector3 anchor;
+    internal static Vector3 anchor;
 
     public float maxDistance = 3;
     public float speed = 4f;
@@ -19,6 +21,8 @@ public class CosmoController : MonoBehaviour
 
     void Start()
     {
+        object s = this.gameObject;
+
         rb = GetComponent<Rigidbody2D>();
         anchor = transform.position;
 
